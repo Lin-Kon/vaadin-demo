@@ -30,7 +30,7 @@ import java.util.Locale;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Route("student")
-//@Theme(value = Lumo.class)
+@Theme(value = Lumo.class)
 public class StudentView extends VerticalLayout {
     private StudentService studentService;
     private Binder<Student> studentBinder;
@@ -50,7 +50,7 @@ public class StudentView extends VerticalLayout {
         FormLayout formLayout = new FormLayout();
         formLayout.add(idField, nameField, datePicker, submitButton, updateButton);
 
-        //tf.setConverter(plainIntegerConverter);
+        // TODO task for myself: find out why the numbers are shown with thousand separators
         StringToIntegerConverter plainIntegerConverter = new StringToIntegerConverter("ID must be a number") {
             protected java.text.NumberFormat getFormat(Locale locale) {
                 NumberFormat format = super.getFormat(locale);
@@ -126,29 +126,28 @@ public class StudentView extends VerticalLayout {
             }
         });
 
-    /*    updateButton.addClickListener(event -> {
-           // Student student = new Student();
+        updateButton.addClickListener(event -> {
+            Student student = new Student();
             //Student student;
             try {
-                Student student=studentBinder.writeBean(student);
+                studentBinder.writeBean(student);
                 Notification.show(student.toString());
-                //editedStudent = studentService.edit(student);
-                //studentGrid.setItems(studentService.findAll());
-                //Notification.show("Saved " + editedStudent.getName());
-//            } catch (ValidationException e) {
-//                System.err.println("*Days " + DAYS.between(LocalDate.now(), editedStudent.getDob()));
-//                Notification.show(e.getMessage());
-//                e.printStackTrace();
+                Student editedStudent = studentService.edit(student);
+                studentGrid.setItems(studentService.findAll());
+                Notification.show("Saved " + editedStudent.getName());
+            } catch (ValidationException e) {
+                System.err.println("*Days " + DAYS.between(LocalDate.now(), student.getDob()));
+                Notification.show(e.getMessage());
+                e.printStackTrace();
             } catch (Exception e) {
                 Notification.show(e.getMessage());
             }
-        });   */
+        });
 
 //        studentGrid.addItemClickListener(event -> {
 //            Student selectedStudent = event.getItem();
 //            studentBinder.readBean(selectedStudent);
 //        });
-        // TODO task for myself: find out why the numbers are shown with thousand separators
     }
 
     private Component getDeleteColumn(Student student) {
@@ -165,9 +164,11 @@ public class StudentView extends VerticalLayout {
     private Component getEditColumn(Student student) {
         Button button = new Button();
         button.setIcon(VaadinIcon.EDIT.create());
+        button.getElement().setProperty("title", "This is a edit button!");
         button.addClickListener(event -> {
             studentBinder.readBean(student);
 
+            //studentGrid.setItems(studentService.findAll());
         });
         return button;
     }
