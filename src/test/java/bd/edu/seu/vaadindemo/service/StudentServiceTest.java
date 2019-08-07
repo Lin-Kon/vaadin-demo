@@ -42,6 +42,13 @@ public class StudentServiceTest {
         assertEquals(expectedStudent, actualStudent);
     }
 
+    @Test
+    public void testEdit(){
+        Student expectedStudent = new Student(1003l, "3nd Pupil", LocalDate.of(1980, Month.OCTOBER, 1));
+        Student actualStudent = studentService.edit(expectedStudent);
+        assertEquals(expectedStudent,actualStudent);
+    }
+
     // TODO add a test method for the delete operation
     @Test
     public void testDelete() {
