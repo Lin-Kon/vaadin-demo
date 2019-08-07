@@ -2,13 +2,15 @@ package bd.edu.seu.vaadindemo.service;
 
 import bd.edu.seu.vaadindemo.model.Student;
 import bd.edu.seu.vaadindemo.repository.StudentRepository;
+import com.vaadin.flow.component.notification.Notification;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,12 +78,40 @@ public class StudentService implements GenericService<Student, Long> {
 //
 //        //return studentRepository.save(student);
 
+        //works just fine
+//        ResponseEntity<Student> response = restTemplate.exchange(
+////                baseUrl,
+////                HttpMethod.POST,
+////                new HttpEntity<>(student),
+////                Student.class);
+//////Long.toString(updatedEmployee.getId()));
+////        Notification.show("Main pera done");
+////        Student editedStudent = response.getBody();
+////        System.out.println(editedStudent);
+////        return editedStudent;
+
         Student savedStudent = restTemplate.postForObject(baseUrl, student, Student.class);
         return savedStudent;
     }
 
-    public Student edit(Student student) {
+    public ResponseEntity<Student> putWithExchange(Student updatedStudent) {
         RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.exchange(baseUrl ,
+                HttpMethod.PUT,
+                new HttpEntity<>(updatedStudent),
+                Student.class
+                );
+    }
+//    public void put(Student updatedStudent) {
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        restTemplate.put(baseUrl + "/{id}",
+//                updatedStudent,
+//                Long.toString(updatedStudent.getId()));
+//    }
+
+    public Student edit(Student student) {
+        //RestTemplate restTemplate = new RestTemplate();
 
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -102,26 +132,66 @@ public class StudentService implements GenericService<Student, Long> {
 //        restTemplate.put(UPDATE_EMPLOYEE_ENDPOINT_URL, updatedEmployee, params);
 
         //ResponseEntity<Student> response = restTemplete.exchange(baseUrl, HttpMethod.PUT, requestEntity, null, id);
-        try {
-                    HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<Student> entity = new HttpEntity<Student>(student,headers);
-            ResponseEntity<Student> response = restTemplate.exchange(
-                    baseUrl,
-                    HttpMethod.PUT,
-                    entity,
-                    Student.class);
-            Student editedStudent = response.getBody();
-            System.out.println(editedStudent);
-            return editedStudent;
-        }
-        catch (Exception e) {
 
-            return null;
-        }
-}
+//        try {
+//                    HttpHeaders headers = new HttpHeaders();
+//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//        HttpEntity<Student> entity = new HttpEntity<Student>(student,headers);
+//            ResponseEntity<Student> response = restTemplate.exchange(
+//                    baseUrl+ "/" + student.getId(),
+//                    HttpMethod.PUT,
+//                    entity,
+//                    Student.class);
+//            Student editedStudent = response.getBody();
+//            System.out.println(editedStudent);
+//            return editedStudent;
+//        }
+//        catch (Exception e) {
+//
+//            return null;
+//        }
 
-//    }
+//        RequestCallback requestCallback(final student updatedInstance) {
+//            return clientHttpRequest -> {
+//                ObjectMapper mapper = new ObjectMapper();
+//                mapper.writeValue(clientHttpRequest.getBody(), updatedInstance);
+//                clientHttpRequest.getHeaders().add(
+//                        HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+//                clientHttpRequest.getHeaders().add(
+//                        HttpHeaders.AUTHORIZATION, "Basic " + getBase64EncodedLogPass());
+//            };
+//
+//        Notification.show("Starting");
+//        String resourceUrl =
+//                baseUrl + '/' + student.getId();
+//        HttpEntity<Student> requestUpdate = new HttpEntity<>(student);
+//        Notification.show("request update done");
+//        Notification.show(student.getName());
+//        ResponseEntity<Student> response = restTemplate.exchange(
+//                resourceUrl,
+//                HttpMethod.PUT,
+//                requestUpdate,
+//                Student.class);
+//        Notification.show("Main pera done");
+//        Student editedStudent = response.getBody();
+//        System.out.println(editedStudent);
+//        return editedStudent;
+
+//        ResponseEntity<Student> response = restTemplate.exchange(
+//                baseUrl,
+//                HttpMethod.POST,
+//                new HttpEntity<>(student),
+//                Student.class);
+//Long.toString(updatedEmployee.getId()));
+        Notification.show("Main pera start");
+        //Student aStudent = new Student(1003l, "3nd Pupil", LocalDate.of(1980, Month.OCTOBER, 1));
+        Student editedStudent = putWithExchange(student).getBody();
+            Notification.show("Main pera done");
+//        put(student);
+//        System.out.println(editedStudent);
+        return student;
+    }
+
 
     // TODO
     public String delete(Student student) {
