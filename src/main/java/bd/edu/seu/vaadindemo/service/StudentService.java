@@ -183,10 +183,9 @@ public class StudentService implements GenericService<Student, Long> {
 //                new HttpEntity<>(student),
 //                Student.class);
 //Long.toString(updatedEmployee.getId()));
-        Notification.show("Main pera start");
+
         //Student aStudent = new Student(1003l, "3nd Pupil", LocalDate.of(1980, Month.OCTOBER, 1));
         Student editedStudent = putWithExchange(student).getBody();
-            Notification.show("Main pera done");
 //        put(student);
 //        System.out.println(editedStudent);
         return student;
