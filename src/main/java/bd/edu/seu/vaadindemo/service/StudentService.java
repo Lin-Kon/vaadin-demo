@@ -104,7 +104,7 @@ public class StudentService implements GenericService<Student, Long> {
     }
 //    public void put(Student updatedStudent) {
 //        RestTemplate restTemplate = new RestTemplate();
-//
+//(
 //        restTemplate.put(baseUrl + "/{id}",
 //                updatedStudent,
 //                Long.toString(updatedStudent.getId()));
@@ -188,7 +188,7 @@ public class StudentService implements GenericService<Student, Long> {
         Student editedStudent = putWithExchange(student).getBody();
 //        put(student);
 //        System.out.println(editedStudent);
-        return student;
+        return editedStudent;
     }
 
 
